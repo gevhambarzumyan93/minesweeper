@@ -1,0 +1,7 @@
+{
+  "@primary-color": "#F54E95",
+  "@link-color": "#F54E95",
+  "@border-radius-base": "8px",
+  "@box-shadow-base": "0px 2px 4px rgba(119, 110, 171, 0.12)",
+  "@card-shadow": "0px 2px 4px rgba(119, 110, 171, 0.12)"
+}
