@@ -1,16 +1,19 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-var glob = require('glob');
+const glob = require('glob');
+const pick = require('lodash/pick');
+
+require('dotenv').config({ path: './.env.development' });
 
 module.exports = {
   devServer: {
-    port: 9000,
-    proxy: {
-      '/api/*': {
-        target: 'http://localhost:8000',
-      },
-    },
+    port: 8000,
+    // proxy: {
+    //   '/api/*': {
+    //     target: 'http://localhost:8000',
+    //   },
+    // },
     historyApiFallback: true,
   },
   mode: 'development',
@@ -19,6 +22,8 @@ module.exports = {
     extensions: ['.js', '.jsx', '.ts', '.tsx', '.less'],
     alias: {
       themes: path.resolve(__dirname, 'src/themes'),
+      layouts: path.resolve(__dirname, 'src/components/layouts'),
+      api: path.resolve(__dirname, 'src/api'),
     },
   },
   entry: {
@@ -33,8 +38,6 @@ module.exports = {
       const pathPars = path.parse(el);
       const pathMap = pathPars.dir.split('/');
       const bandlerName = pathPars.name.includes('index') ? pathMap[pathMap.length - 1] : pathPars.name;
-
-      console.log(bandlerName, '< bandlerName');
       obj[bandlerName] = el;
       return obj;
     }, {}),
@@ -45,7 +48,7 @@ module.exports = {
       {
         test: /\.[jt]sx?$/,
         exclude: /node_modules/,
-        use: 'babel-loader',
+        use: ['babel-loader', 'source-map-loader'],
       },
       {
         test: /\.css$/,
@@ -53,25 +56,47 @@ module.exports = {
       },
       {
         test: /\.less$/,
-        use: ['style-loader', 'css-loader', 'less-loader'],
-        // use: [
-        //   'style-loader',
-        //   'css-loader',
-        //   'less-loader',
-        //   {
-        //     loader: 'less-loader',
-        //     options: {
-        //       lessOptions: {
-        //         javascriptEnabled: true,
-        //       },
-        //     },
-        //   },
-        // ],
+        // use: ['style-loader', 'css-loader', 'less-loader'],
+        use: [
+          'style-loader',
+          'css-loader',
+          'less-loader',
+          {
+            loader: 'less-loader',
+            options: {
+              lessOptions: {
+                javascriptEnabled: true,
+              },
+            },
+          },
+        ],
+      },
+      {
+        test: /\.m?js/,
+        resolve: {
+          fullySpecified: false,
+        },
       },
     ],
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
+    new webpack.DefinePlugin({
+      'process.env': {
+        //   REACT_APP_HOSTNAME: JSON.stringify(process.env.REACT_APP_HOSTNAME),
+        REACT_APP_BUCKET_NAME: JSON.stringify(process.env.REACT_APP_BUCKET_NAME),
+        REACT_APP_BUCKET_REGION: JSON.stringify(process.env.REACT_APP_BUCKET_REGION),
+        REACT_APP_COGNITO_REGION: JSON.stringify(process.env.REACT_APP_COGNITO_REGION),
+        REACT_APP_COGNITO_USER_POOL_ID: JSON.stringify(process.env.REACT_APP_COGNITO_USER_POOL_ID),
+        REACT_APP_COGNITO_WEB_CLIENT_ID: JSON.stringify(process.env.REACT_APP_COGNITO_WEB_CLIENT_ID),
+        REACT_APP_COGNITO_IDENTITY_ID: JSON.stringify(process.env.REACT_APP_COGNITO_IDENTITY_ID),
+        REACT_APP_COGNITO_DOMAIN: JSON.stringify(process.env.REACT_APP_COGNITO_DOMAIN),
+        REACT_APP_COGNITO_REDIRECT_URL: JSON.stringify(process.env.REACT_APP_COGNITO_REDIRECT_URL),
+        REACT_APP_HOSTNAME: JSON.stringify(process.env.REACT_APP_HOSTNAME),
+        REACT_APP_ALGOLIA_APP_ID: JSON.stringify(process.env.REACT_APP_ALGOLIA_APP_ID),
+        REACT_APP_ALGOLIA_SEARCH_API_KEY: JSON.stringify(process.env.REACT_APP_ALGOLIA_SEARCH_API_KEY),
+      },
+    }),
     new HtmlWebpackPlugin({
       title: 'ProjectName',
       hash: true,
@@ -92,10 +117,24 @@ module.exports = {
         };
       },
     }),
+    new webpack.ProvidePlugin({
+      process: 'process/browser',
+    }),
+    // new webpack.SourceMapDevToolPlugin({
+    //   filename: '[name].[hash:8].js',
+    //   exclude: /node_modules/,
+    // }),
   ],
   output: {
     publicPath: 'auto',
     path: path.resolve(__dirname, 'dist'),
-    filename: '[name].js',
+    filename: '[name].[hash:8].js',
+    chunkFilename: '[id].[hash:8].js',
   },
+  optimization: {
+    splitChunks: {
+      chunks: 'all',
+    },
+  },
+  devtool: 'source-map',
 };
