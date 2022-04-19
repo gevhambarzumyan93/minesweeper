@@ -8,7 +8,6 @@ const setupSocket = (dispatch) => {
   };
 
   socket.onmessage = (event) => {
-    console.log(event.data, '< event');
     dispatch(setHelp(event.data));
   };
 
