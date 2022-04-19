@@ -26,7 +26,6 @@ export const sweeperSlice = createSlice({
   reducers: {
     startConnection: (state) => {
       state.isConntected = true;
-      console.log('startConnecting');
     },
     getHelp: (state, action) => {
       state.helpText = action.payload;
@@ -36,7 +35,6 @@ export const sweeperSlice = createSlice({
     },
     endConnection: (state) => {
       state.isConntected = false;
-      console.log('endConnection');
     },
     startGame: (state) => {
       state.counter = 0;

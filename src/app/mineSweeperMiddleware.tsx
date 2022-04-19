@@ -1,6 +1,5 @@
 import { Middleware } from 'redux';
-// import { io } from 'socket.io-client';
-import { getHelp, startGame } from './mineSweeperSlice';
+import { getHelp } from './mineSweeperSlice';
 import setupSocket from '../../sockets';
 
 let socket: WebSocket;
