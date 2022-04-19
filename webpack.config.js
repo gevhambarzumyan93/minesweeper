@@ -2,9 +2,6 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const glob = require('glob');
-const pick = require('lodash/pick');
-
-require('dotenv').config({ path: './.env.development' });
 
 module.exports = {
   devServer: {
@@ -22,7 +19,6 @@ module.exports = {
     extensions: ['.js', '.jsx', '.ts', '.tsx', '.less'],
     alias: {
       themes: path.resolve(__dirname, 'src/themes'),
-      layouts: path.resolve(__dirname, 'src/components/layouts'),
       api: path.resolve(__dirname, 'src/api'),
     },
   },
@@ -82,20 +78,7 @@ module.exports = {
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new webpack.DefinePlugin({
-      'process.env': {
-        //   REACT_APP_HOSTNAME: JSON.stringify(process.env.REACT_APP_HOSTNAME),
-        REACT_APP_BUCKET_NAME: JSON.stringify(process.env.REACT_APP_BUCKET_NAME),
-        REACT_APP_BUCKET_REGION: JSON.stringify(process.env.REACT_APP_BUCKET_REGION),
-        REACT_APP_COGNITO_REGION: JSON.stringify(process.env.REACT_APP_COGNITO_REGION),
-        REACT_APP_COGNITO_USER_POOL_ID: JSON.stringify(process.env.REACT_APP_COGNITO_USER_POOL_ID),
-        REACT_APP_COGNITO_WEB_CLIENT_ID: JSON.stringify(process.env.REACT_APP_COGNITO_WEB_CLIENT_ID),
-        REACT_APP_COGNITO_IDENTITY_ID: JSON.stringify(process.env.REACT_APP_COGNITO_IDENTITY_ID),
-        REACT_APP_COGNITO_DOMAIN: JSON.stringify(process.env.REACT_APP_COGNITO_DOMAIN),
-        REACT_APP_COGNITO_REDIRECT_URL: JSON.stringify(process.env.REACT_APP_COGNITO_REDIRECT_URL),
-        REACT_APP_HOSTNAME: JSON.stringify(process.env.REACT_APP_HOSTNAME),
-        REACT_APP_ALGOLIA_APP_ID: JSON.stringify(process.env.REACT_APP_ALGOLIA_APP_ID),
-        REACT_APP_ALGOLIA_SEARCH_API_KEY: JSON.stringify(process.env.REACT_APP_ALGOLIA_SEARCH_API_KEY),
-      },
+      'process.env': {},
     }),
     new HtmlWebpackPlugin({
       title: 'ProjectName',

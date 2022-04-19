@@ -1,18 +1,18 @@
 import React from 'react';
 import Page from './components/BaseComponents/Page';
-import { UserProvider } from './contexts/UserContext';
-import ErrorBoundary from 'layouts/ErrorBoundary';
-import Demo from './Demo';
+import MainField from './components/BaseComponents/MainField';
+import Layout from './components/Layout/MainLayout';
+import GameSettings from './components/GameSettings';
+import { useDispatch } from 'react-redux';
+import setupSocket from '../sockets';
+import { sagaMiddleware } from './app/store';
 
 export default () => {
   return (
-    <UserProvider>
-      <ErrorBoundary>
-        <Page inner>
-          Your App begins here
-          <Demo />
-        </Page>
-      </ErrorBoundary>
-    </UserProvider>
+    <Page inner>
+      <Layout renderForm={() => <GameSettings />}>
+        <MainField />
+      </Layout>
+    </Page>
   );
 };
