@@ -10,8 +10,6 @@ const MineField = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log(counter, suspectedCounter, mineCount);
-
     if (counter == mineCount && suspectedCounter == mineCount) {
       alert('You win');
       dispatch(startGame());
