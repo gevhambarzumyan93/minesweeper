@@ -7,7 +7,7 @@ export const StyledTableRow = styled(TableRow)();
 
 export const StyledTableCell = styled(TableCell)(() => ({
   [`&.${tableCellClasses.body}`]: {
-    border: `1px solid red`,
+    border: `1px solid #898989`,
     height: '60px',
     width: '60px',
     padding: '0px !important',
@@ -18,9 +18,9 @@ export const SField = styled('div')(({ wrongSuspect }: { wrongSuspect: boolean }
   cursor: 'pointer',
   height: '100%',
   width: '100%',
-  border: `1px solid red`,
+  border: `1px solid #898989`,
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
-  background: wrongSuspect ? 'red' : 'white',
+  background: wrongSuspect ? '#ff00008a' : 'white',
 }));
