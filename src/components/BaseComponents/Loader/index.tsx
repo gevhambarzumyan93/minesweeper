@@ -8,7 +8,7 @@ type TLoaderType = {
   text?: string;
 };
 
-export default ({ spinning, fullScreen = false, text = '' }) => {
+export default ({ spinning, fullScreen = false, text = '' }: TLoaderType) => {
   return (
     <div
       className={classNames(styles.loader, {

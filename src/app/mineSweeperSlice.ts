@@ -1,13 +1,15 @@
 import { formLabelClasses } from '@mui/material';
 import { createSlice } from '@reduxjs/toolkit';
-import { sweeperProps, fieldProps } from './types';
+import { TSweeperProps, TFieldProps } from './types';
 
-const initialState: sweeperProps = {
+const initialState: TSweeperProps = {
   fieldSize: 5,
   mineCount: 10,
   counter: 0,
   suspectedCounter: 0,
   isConntected: false,
+  isWined: false,
+  isGameOver: false,
   helpText: '',
   fieldMap: [],
 };
@@ -33,14 +35,19 @@ export const sweeperSlice = createSlice({
     setHelp: (state, action) => {
       state.helpText = action.payload;
     },
+    setYouWin: (state) => {
+      state.isWined = true;
+    },
     endConnection: (state) => {
       state.isConntected = false;
     },
     startGame: (state) => {
+      state.isGameOver = false;
+      state.isWined = false;
       state.counter = 0;
       state.suspectedCounter = 0;
       let mineCount = state.mineCount;
-      const fieldMap: fieldProps[][] = [];
+      const fieldMap: TFieldProps[][] = [];
 
       for (let i = 0; i < state.fieldSize; i++) {
         fieldMap[i] = [];
@@ -90,14 +97,21 @@ export const sweeperSlice = createSlice({
       state.suspectedCounter = !field.suspected ? state.suspectedCounter + 1 : state.suspectedCounter - 1;
     },
     openField: (state, action) => {
-      const { xCordinate, yCordinate, neighbourFields } = action.payload;
-      const field = state.fieldMap[xCordinate][yCordinate];
-      if (field.mine) {
-        alert('Game Over');
+      if (state.isGameOver) {
         return;
       }
-      const count = neighbourFields.filter((item: fieldProps) => item?.mine).length;
-      state.fieldMap[xCordinate][yCordinate] = { ...field, value: `${count}` };
+      const { xCordinate, yCordinate, neighbourFields } = action.payload;
+      const field = state.fieldMap[xCordinate][yCordinate];
+      if (field.suspected) {
+        state.suspectedCounter = state.suspectedCounter - 1;
+      }
+      if (field.mine) {
+        state.isGameOver = true;
+        return;
+      }
+      const count = neighbourFields.filter((item: TFieldProps) => item?.mine).length;
+
+      state.fieldMap[xCordinate][yCordinate] = { ...field, suspected: false, value: `${count}` };
     },
   },
 });
@@ -110,11 +124,12 @@ export const {
   changeFieldSize,
   startConnection,
   endConnection,
+  setYouWin,
   // this is just an experiment i was tring middlewares
   getHelp,
   setHelp,
 } = sweeperSlice.actions;
 
-export const selectSweeper = (state: { sweeper: sweeperProps }) => state.sweeper;
+export const selectSweeper = (state: { sweeper: TSweeperProps }) => state.sweeper;
 
 export default sweeperSlice.reducer;

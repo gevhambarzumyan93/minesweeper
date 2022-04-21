@@ -1,4 +1,4 @@
-export type fieldProps = {
+export type TFieldProps = {
   x: number;
   y: number;
   suspected: boolean;
@@ -6,12 +6,14 @@ export type fieldProps = {
   value?: string;
 };
 
-export type sweeperProps = {
+export type TSweeperProps = {
   fieldSize: number;
   mineCount: number;
   counter: number;
   suspectedCounter: number;
   helpText: string;
   isConntected: boolean;
-  fieldMap: fieldProps[][];
+  isWined: boolean;
+  isGameOver: boolean;
+  fieldMap: TFieldProps[][];
 };

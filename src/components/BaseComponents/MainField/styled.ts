@@ -14,7 +14,7 @@ export const StyledTableCell = styled(TableCell)(() => ({
   },
 }));
 
-export const SField = styled('div')({
+export const SField = styled('div')(({ wrongSuspect }: { wrongSuspect: boolean }) => ({
   cursor: 'pointer',
   height: '100%',
   width: '100%',
@@ -22,4 +22,5 @@ export const SField = styled('div')({
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
-});
+  background: wrongSuspect ? 'red' : 'white',
+}));
